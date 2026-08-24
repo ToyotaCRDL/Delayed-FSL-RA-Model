@@ -43,12 +43,12 @@ clearvars -except R C tau M beta alpha lamda v_thr ref u_thr receptorName paramS
                   expFireRate expTempVar dotSpace setFiringRateR2 setTempoVariR2 setFiringRateRMSE setTempoVariRMSE
 
 %*****************************************************************************
-if     mlp==1; modelNum='58-9' ; %dot spacing=6.2mm %**********
-elseif mlp==2; modelNum='58-15'; %dot spacing=5.2mm %**********
-elseif mlp==3; modelNum='58-14'; %dot spacing=4.3mm %**********
-elseif mlp==4; modelNum='58-8' ; %dot spacing=3.2mm %**********
-elseif mlp==5; modelNum='58-16'; %dot spacing=2.4mm %**********
-elseif mlp==6; modelNum='58-10'; %dot spacing=1.3mm %**********
+if     mlp==1; modelNum='58-28' ; %dot spacing=6.2mm %**********
+elseif mlp==2; modelNum='58-27'; %dot spacing=5.2mm %**********
+elseif mlp==3; modelNum='58-26'; %dot spacing=4.3mm %**********
+elseif mlp==4; modelNum='58-25' ; %dot spacing=3.2mm %**********
+elseif mlp==5; modelNum='58-24'; %dot spacing=2.4mm %**********
+elseif mlp==6; modelNum='58-23'; %dot spacing=1.3mm %**********
 end
 %*****************************************************************************
 
@@ -149,8 +149,8 @@ if ( 1275<ii && ii<1327 )
     figure(1)
     er=errorbar(spikeTime/1000,spikePositionYcoord,err,'CapSize',0,'color',[50/255 50/255 50/255]);
     er.LineStyle = 'none';  
-    if strcmp(modelNum,'58-15')
-        xlim([1.15 1.6]) %**********
+    if strcmp(modelNum,'58-27')
+        xlim([1.15 1.65]) %**********
     else
         xlim([1.2 1.7]) %**********
     end
@@ -162,8 +162,8 @@ if ( 1275<ii && ii<1327 )
     subplot(1,6,mlp)
     er=errorbar(spikeTime/1000,spikePositionYcoord,err,'CapSize',0,'color',[50/255 50/255 50/255]);
     er.LineStyle = 'none';  
-    if strcmp(modelNum,'58-15')
-        xlim([1.15 1.6]) %**********
+    if strcmp(modelNum,'58-27')
+        xlim([1.15 1.65]) %**********
     else
         xlim([1.2 1.7]) %**********
     end
@@ -208,7 +208,7 @@ end % end main loop
 
 
 %*********************************************************Temporal Variation
-if strcmp(modelNum,'58-15')
+if strcmp(modelNum,'58-27')
     dataTime2=[1.15:0.01:1.65]'; %**********
 else
     dataTime2=[1.2:0.01:1.7]'; %**********

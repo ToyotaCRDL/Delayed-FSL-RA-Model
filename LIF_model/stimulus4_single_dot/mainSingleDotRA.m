@@ -15,7 +15,6 @@ global M;   M   = 1.0; % number of merkels
 load param.mat
 
 for mlp2 = 1:size(param,1)
-% for mlp2 = 47:47
 
 receptorName = 'RA';
 paramSet='setA';
@@ -88,8 +87,8 @@ end
 dataCoordResampX = -1*dataCoordResampX;
 dataCoordResampX(:,1) = dataCoordX(1,1);
 dataCoordResampX(:,size(dataCoordResampX,1)) = dataCoordX(1,size(dataCoordX,1));
-dataCoordResampY(1,:) = dataCoordY(1,1);
-dataCoordResampY(size(dataCoordResampY,1),:) = dataCoordY(size(dataCoordY,1),1);
+dataCoordResampY(1,:) = dataCoordY(1,size(dataCoordY,2));
+dataCoordResampY(size(dataCoordResampY,1),:) = dataCoordY(1,1);
 
 for i=1:size(dataTime,1)
     dataSEDWholeResamp{i,1} = griddata(dataCoordX, dataCoordY, dataSEDWhole{i,1}, dataCoordResampX, dataCoordResampY);
@@ -169,6 +168,32 @@ end
 
 end % end main loop
 
+
+%**********************************************************************************output each spikeTime
+% maxLength = max(cellfun(@length, allSpikeTime));
+% outSpikeTimeTemp = zeros(51, maxLength);
+% for i=1:51
+%     for j=1:size(allSpikeTime{i+1275,1},1)
+%         outSpikeTimeTemp(i,j) = allSpikeTime{i+1275,1}(j,1);
+%     end
+% end
+% 
+% cd ('result1')
+% 
+% if     mlp==1; dw='4-1';
+% elseif mlp==2; dw='2-6';
+% elseif mlp==3; dw='1-6';
+% end
+% filename = strcat('single_dot_sep_param_',num2str(mlp2),'_dw_',dw,'.csv');
+% 
+% if exist(filename, 'file') == 2
+%     delete(filename);
+% end
+% 
+% writematrix(outSpikeTimeTemp, filename);
+% 
+% cd (mainFolder);
+%**********************************************************************************
 
 
 ii = 1301; % ************************************************************
