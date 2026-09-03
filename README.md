@@ -119,9 +119,9 @@ The simulation pipeline consists of the following steps:
 - Run:<br>
 &nbsp;&nbsp;&nbsp;   `mainDotTexRA.m` (for RA responses)
 - Output (variables):<br>
-&nbsp;&nbsp;&nbsp;   `allSpikeTime`: Calculated spike timing. Exported as dot_texture_sep_param_13_ds_XX-XX_delay_XX.csv (stored in result1/). Used to generate Fig. XX.<br>
-&nbsp;&nbsp;&nbsp;   `setFiringRateRMSE`: Calculated RMSE for firing rate. Exported as dot_texture_firerate_rmse.csv (stored in result2/). Used to generate Fig. XX.<br>
-&nbsp;&nbsp;&nbsp;   `setTempoVariRMSE`: Calculated RMSE for temporal variation. Exported as dot_texture_tempvar_rmse.csv (stored in result2/). Used to generate Fig. XX.
+&nbsp;&nbsp;&nbsp;   `allSpikeTime`: Calculated spike timing. Exported as dot_texture_sep_param_13_ds_XX-XX_delay_XX.csv (stored in result1/). Used to generate Supplementary Fig. S7.<br>
+&nbsp;&nbsp;&nbsp;   `setFiringRateRMSE`: Calculated RMSE for firing rate. Exported as dot_texture_firerate_rmse.csv (stored in result2/). Used to generate Fig. 12(A).<br>
+&nbsp;&nbsp;&nbsp;   `setTempoVariRMSE`: Calculated RMSE for temporal variation. Exported as dot_texture_tempvar_rmse.csv (stored in result2/). Used to generate Fig. 12(A).
 
 
 ### 5.6 Effect of unresponsive period (Stimulus4)
@@ -131,8 +131,8 @@ The simulation pipeline consists of the following steps:
 - Run:<br>
 &nbsp;&nbsp;&nbsp;   `mainSingleDotRA.m` (for RA responses)
 - Output (variables):<br>
-&nbsp;&nbsp;&nbsp;   `allSpikeTime`: Calculated spike timing. Exported as single_dot_sep_param_13_dw_XX-XX.csv (stored in result1/). Used to generate Fig. XX.<br>
-&nbsp;&nbsp;&nbsp;   `setRespWidth`: Calculated response width. Exported as single_dot_respwidth.csv (stored in result2/). The response widths in XX_respwidth2.csv represent the differences between the simulation results and the experimental data. Used to generate Fig. XX..
+&nbsp;&nbsp;&nbsp;   `allSpikeTime`: Calculated spike timing. Exported as single_dot_sep_param_13_dw_XX-XX.csv (stored in result1/). Used to generate Supplementary Fig. S8.<br>
+&nbsp;&nbsp;&nbsp;   `setRespWidth`: Calculated response width. Exported as single_dot_respwidth.csv (stored in result2/). The response widths in XX_respwidth2.csv represent the differences between the simulation results and the experimental data. Used to generate Fig. 12(B).
 
 
 ### 5.7 Effect of neuronal noise (Stimulus3)
@@ -142,9 +142,9 @@ The simulation pipeline consists of the following steps:
 - Run:<br>
 &nbsp;&nbsp;&nbsp;   `mainDotTexRA.m` (for RA responses)
 - Output (variables):<br>
-&nbsp;&nbsp;&nbsp;   `allSpikeTime`: Calculated spike timing. Exported as dot_texture_sep_param_XX_ds_XX-XX_noise_XX.csv (stored in result1/). Used to generate Fig. XX.<br>
-&nbsp;&nbsp;&nbsp;   `setFiringRateRMSE`: Calculated RMSE for firing rate. Exported as dot_texture_firerate_rmse.csv (stored in result2/). The results in XX_rmse.csv are sorted in ascending order of the parameter set number, whereas the results in XX_rmse2.csv are sorted in ascending order of &Delta;FST. Fig. XX was generated using XX_rmse2.csv.<br>
-&nbsp;&nbsp;&nbsp;   `setTempoVariRMSE`: Calculated RMSE for temporal variation. Exported as dot_texture_tempvar_rmse.csv (stored in result2/). Fig. XX was generated using XX_rmse2.csv.
+&nbsp;&nbsp;&nbsp;   `allSpikeTime`: Calculated spike timing. Exported as dot_texture_sep_param_XX_ds_XX-XX_noise_XX.csv (stored in result1/). Used to generate Fig. 13.<br>
+&nbsp;&nbsp;&nbsp;   `setFiringRateRMSE`: Calculated RMSE for firing rate. Exported as dot_texture_firerate_rmse.csv (stored in result2/). The results in XX_rmse.csv are sorted in ascending order of the parameter set number, whereas the results in XX_rmse2.csv are sorted in ascending order of &Delta;FST. Supplementary Fig. S11(A) was generated using XX_rmse2.csv.<br>
+&nbsp;&nbsp;&nbsp;   `setTempoVariRMSE`: Calculated RMSE for temporal variation. Exported as dot_texture_tempvar_rmse.csv (stored in result2/). Supplementary Fig. S11(B) was generated using XX_rmse2.csv.
 
 
 ### 5.8 Effect of neuronal noise (Stimulus4)
@@ -154,8 +154,8 @@ The simulation pipeline consists of the following steps:
 - Run:<br>
 &nbsp;&nbsp;&nbsp;   `mainSingleDotRA.m` (for RA responses)
 - Output (variables):<br>
-&nbsp;&nbsp;&nbsp;   `allSpikeTime`: Calculated spike timing. Exported as single_dot_sep_param_XX_dw_XX-XX_noise_XX.csv (stored in result1/). Used to generate Fig. XX.<br>
-&nbsp;&nbsp;&nbsp;   `setRespWidth`: Calculated response width. Exported as single_dot_respwidth.csv (stored in result2/). The results in XX_respwidth.csv are sorted in ascending order of the parameter set number, whereas the results in XX_respwidth2.csv are sorted in ascending order of &Delta;FST. In addition, the response widths in XX_respwidth2.csv represent the differences between the simulation results and the experimental data. Fig. XX was generated using XX_respwidth2.csv.
+&nbsp;&nbsp;&nbsp;   `allSpikeTime`: Calculated spike timing. Exported as single_dot_sep_param_XX_dw_XX-XX_noise_XX.csv (stored in result1/). Used to generate Supplementary Fig. S9.<br>
+&nbsp;&nbsp;&nbsp;   `setRespWidth`: Calculated response width. Exported as single_dot_respwidth.csv (stored in result2/). The results in XX_respwidth.csv are sorted in ascending order of the parameter set number, whereas the results in XX_respwidth2.csv are sorted in ascending order of &Delta;FST. In addition, the response widths in XX_respwidth2.csv represent the differences between the simulation results and the experimental data. Supplementary Fig. S10 was generated using XX_respwidth2.csv.
 
 
 ### 5.9 Effect of response width definition (Stimulus4)
@@ -165,6 +165,6 @@ The simulation pipeline consists of the following steps:
 - Run:<br>
 &nbsp;&nbsp;&nbsp;   `mainSingleDotRA.m` (for RA responses)
 - Output (variables):<br>
-&nbsp;&nbsp;&nbsp;   `allSpikeTime`: Calculated spike timing. Exported as single_dot_sep_param_XX_dw_XX-XX_noise_XX.csv (stored in result1/). Used to generate Fig. XX.<br>
+&nbsp;&nbsp;&nbsp;   `allSpikeTime`: Calculated spike timing. Exported as single_dot_sep_param_XX_dw_XX-XX_noise_XX.csv (stored in result1/). Used to generate Supplementary Fig. S6.<br>
 &nbsp;&nbsp;&nbsp;   `spikeWidth`: Calculated response width. Exported as single_dot_respwidth.csv (stored in result2/). The results in XX_respwidth.csv are sorted in ascending order of the parameter set number, whereas the results in XX_respwidth2.csv are sorted in ascending order of &Delta;FST.
 
