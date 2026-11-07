@@ -42,6 +42,7 @@ Run in this folder, in this order. Results are written to `results/<name>/` (`un
 | 2 | `run_all.py` | `summary.csv`, `representative.json`, `delay_control.csv`; all SEPs and metrics in `../LIF_model/*/result1`, `result2`, `param.mat`, `popCost.mat` and `../LIF_model/statistical analysis/*.csv` (v1.0 formats) | 5 min |
 | 3 | `probe_summary.py` | `probe_summary.csv`: FSL and firing rate at each speed, ΔFSL, RMS rate error | < 1 min |
 | 4 | `theta_basis.py` | `theta_basis.csv`: residual SED fluctuation after the probe indentation (basis of θ) and a check that no set fires during the hold | < 1 min |
+| 4b | `hold_spikes.py` | hold-phase spikes (more than 10 ms after the end of the 1 mm indentation): `hold_spikes.csv` for the 150 revised sets (θ = 0.13) and `results/v1.0_sets/hold_spikes_theta0.csv` for the 53 v1.0 sets without the threshold (θ = 0); needs the v1.0 checkout | < 1 min |
 | 5 | `dt_series.py` | `dt_series/`: probe responses of the 150 sets at time steps from 0.5 to 0.0015625 ms | |
 | 6 | `response_analyses.py` | `thinning/`: spike-count-matched random thinning; `spike_counts/`: spike counts in 0–100 ms; `speed_contribution/`: per-speed errors and objective shares | |
 | 7 | `evaluate_front.py` | `front_summary.csv`: per-set metrics with the numbers of responding afferents | |
@@ -76,6 +77,7 @@ in the repository root.
 | `verify_v1_scan.py` | reproduces the v1.0 SEPs of the dot pattern and single dots, FR/TV RMSE, RW and spike width |
 | `verify_v1_extra.py` | reproduces the v1.0 Braille SEPs and the control analysis; noise compared in distribution |
 | `original_sets_dt.py` | probe responses of the 53 v1.0 sets at finer time steps (`results/v1.0_sets/`) |
+| `hold_spikes.py` | hold-phase spikes of the 53 v1.0 sets without the threshold, at dt = 0.0125 ms (`results/v1.0_sets/hold_spikes_theta0.csv`) |
 
 
 ## Files
