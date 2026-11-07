@@ -3,7 +3,7 @@ function sum_FSS = plt_main_ISI(send_data)
     global C;C = 1.01e-6;
     global tau;tau = 66.77; % tau=R*C
     global M;M = 1.0; % number of merkels
-    global u_thr;u_thr = 1.1;
+    global u_thr; theta = 0.13; dt = 0.0125; u_thr = theta * dt; % revised version; v1.0: u_thr = 1.1, dt = 0.5 ms
     %**********************************************
     global beta;
     global lamda;
@@ -13,8 +13,8 @@ function sum_FSS = plt_main_ISI(send_data)
     
     beta=send_data(1);
     lamda=send_data(2);
-    ref=send_data(3);
-    v_thr=send_data(4);
+    ref=2.1; % T_ref fixed at 2.1 ms (revised version)
+    v_thr=send_data(3);
     
     load dataForOptimize.mat data
     load actual_dataForOptimize.mat actual_data
@@ -25,7 +25,7 @@ function sum_FSS = plt_main_ISI(send_data)
     
     start = 0.00;
     finish = 200.0;
-    point = 401;
+    point = round((finish-start)/dt) + 1; % v1.0: 401
     
     for d_count = 1:6
     % clear dataMain
@@ -37,7 +37,7 @@ function sum_FSS = plt_main_ISI(send_data)
     
         dataMain(:,1) = vq; %SED
         dataMain(:,2) = xq; %Time
-        dataMain(1:point,3) = 0.50; %dt
+        dataMain(1:point,3) = dt; %dt
         dataMain(:,4) = linspace(start,finish/1000,point);
     
     

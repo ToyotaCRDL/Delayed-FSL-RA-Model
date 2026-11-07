@@ -45,6 +45,11 @@ redPallete{4,1}=red4;
 
 
 
+%*** revised version: the same threshold and time step for every stimulus
+theta = 0.13;   % SED-rate threshold [J m^-3 ms^-1] (current only when |dU/dt| > theta)
+dt    = 0.0125; % time step [ms] (v1.0: 0.5 ms for the probe, 2.5 ms for scanning)
+% T_ref is fixed at 2.1 ms (column 3 of param.mat)
+
 %*****************************************************************************
 load param.mat
 %*****************************************************************************
@@ -56,11 +61,11 @@ beta  = param(mlp,1);
 lamda = param(mlp,2);
 v_thr = param(mlp,4);
 ref   = param(mlp,3);
-u_thr = 1.1;
+u_thr = theta * dt; % threshold on the SED increment per time step (v1.0: 1.1)
 
 start = 0.00;
 finish = 200.0;
-point = 401;
+point = round((finish-start)/dt) + 1; % v1.0: 401
 
 figure(1); clf
 disp(['  mlp = ',num2str(mlp)])
@@ -75,7 +80,7 @@ for d_count = 1:6
 
     dataMain(:,1) = vq; %SED
     dataMain(:,2) = xq; %Time
-    dataMain(1:point,3) = 0.50; %dt
+    dataMain(1:point,3) = dt; %dt
     dataMain(:,4) = linspace(start,finish/1000,point);
     
     jj=1;

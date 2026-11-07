@@ -1,0 +1,7 @@
+{
+  "published_#1": 1,
+  "published_#13": 87,
+  "published_#20": 92,
+  "published_#53": 118,
+  "rule": "#1 = best FSL (set 1); #13 = best balance of FSL and rate (closest to the ideal point with both objectives scaled to [0, 1]); #20, #53 = sets with ΔFSL closest to 10 and 30 ms"
+}

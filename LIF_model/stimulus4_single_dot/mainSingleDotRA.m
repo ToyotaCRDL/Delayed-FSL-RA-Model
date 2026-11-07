@@ -12,6 +12,11 @@ global M;   M   = 1.0; % number of merkels
 %**********************************************
 
 
+%*** revised version: the same threshold and time step for every stimulus
+theta = 0.13;   % SED-rate threshold [J m^-3 ms^-1] (current only when |dU/dt| > theta)
+dt    = 0.0125; % time step [ms] (v1.0: 0.5 ms for the probe, 2.5 ms for scanning)
+% T_ref is fixed at 2.1 ms (column 3 of param.mat)
+
 load param.mat
 
 for mlp2 = 1:size(param,1)
@@ -22,7 +27,7 @@ global beta;  beta  = param(mlp2,1);
 global lamda; lamda = param(mlp2,2);
 global v_thr; v_thr = param(mlp2,4);
 global ref;   ref   = param(mlp2,3);
-global u_thr; u_thr = 1.1;
+global u_thr; u_thr = theta * dt; % threshold on the SED increment per time step (v1.0: 1.1)
 
 
 for mlp = 1:3
@@ -30,7 +35,7 @@ for mlp = 1:3
 figure(1); clf
 figure(2); clf
 
-clearvars -except R C tau M beta alpha lamda v_thr ref u_thr receptorName paramSet mlp mlp2 param setRespWidth spikeWidth
+clearvars -except R C tau M theta dt beta alpha lamda v_thr ref u_thr receptorName paramSet mlp mlp2 param setRespWidth spikeWidth
 
 %*****************************************************************************
 if     mlp==1; modelNum='70-2';
@@ -104,11 +109,16 @@ end
 dataSED = dataSEDPost1;
 iniYcoordCenter = dataCoordResampY(:,1);
 
+%*** revised version: spline-resample the SED of the centre-line nodes (FE output every 2.5 ms) onto dt
+tFE = dataTime(:,1)*1000; % [ms]
+tq = linspace(tFE(1), tFE(end), round((tFE(end)-tFE(1))/dt) + 1)';
+dataSEDq = interp1(tFE, dataSED(:,1276:1327), tq, 'spline'); % nodes 1276-1327 (column ii-1275)
+
 clear dataMain
-dataMain(:,1) = dataSED(:,1);
-dataMain(:,2) = dataTime(:,1)*1000;
-dataMain(1:size(dataSED,1),3) = (dataTime(2,1)-dataTime(1,1))*1000;
-dataMain(:,4) = dataTime(:,1);
+dataMain(:,1) = dataSEDq(:,1);
+dataMain(:,2) = tq;
+dataMain(1:size(dataSEDq,1),3) = dt;
+dataMain(:,4) = tq/1000;
 
 
 
@@ -119,8 +129,8 @@ for ii=1276:1326+1
 
 disp(['  mlp2 = ',num2str(mlp2),',  mlp = ',num2str(mlp),'  calculate ',num2str(ii),'th node out of ',num2str(size(dataSED,2)),' nodes'])
 
-dataMain(:,1) = dataSED(:,ii);%***SED
-dataMain(:,4) = dataTime(:,ii);%***yposi or time
+dataMain(:,1) = dataSEDq(:,ii-1275);%***SED
+dataMain(:,4) = tq/1000;%***time [s]
 
 
 [firingRate,spikeTime,spikePosition,spikeMarker,time,membPotential,time2,cur2,dataSED2] = spikeRA(dataMain);
@@ -207,7 +217,11 @@ for j=1:size(allSpikeTime{ii,1},1)
     end
 end
 
+try % revised version: NaN when the centre afferent does not fire in the stimulus period
 spikeWidth(mlp2,mlp) = ( spikeWidthTemp(end,1) - spikeWidthTemp(find(spikeWidthTemp~=0,1,'first'),1) ) / 1000.0 * 10.0; % /1000=msÅ®sÅC*10(m/s)=ë¨ìxÇÇ©ÇØÇƒéûä‘ÉXÉPÅ[ÉãÇãóó£ÉXÉPÅ[ÉãÇ…
+catch
+    spikeWidth(mlp2,mlp) = NaN;
+end
 
 for i=0:50
     firingRateBinTemp=0; count=0;
@@ -235,6 +249,9 @@ for i=0:50
     firingRateBinTime(i+1,1) = i*20+1000;
 end
 
+% revised version: RW is NaN when it cannot be determined (too few spikes for the 25% crossings)
+try
+
 pDataSt = find(firingRateBin~=0,1,'first') - 1;
 pDataEn = find(firingRateBin~=0,1,'last') + 1;
 p = polyfit(firingRateBinTime(pDataSt:pDataEn,1),firingRateBin(pDataSt:pDataEn,1),8);
@@ -246,10 +263,6 @@ for i=1:51; handleBar.CData(i,:) = [164/255 217/255 234/255]; end
 hold on
 plot(firingRateBinTime(pDataSt:pDataEn,1)/1000,polyval(p,firingRateBinTime(pDataSt:pDataEn,1)),'Color',[38/255 38/255 38/255])
 
-% égópÇµÇƒÇ¢ÇÈÉpÉâÉÅÅ[É^ÇæÇ∆#48Ç©ÇÁmlp==1ÇÃî≠âŒÇ™ï–ë§1Ç¬Ç…Ç»ÇËÅAâûìöïùÇ™ãÅÇﬂÇÁÇÍÇ»Ç≠Ç»ÇÈÇÃÇ≈NaNÇë}ì¸
-if mlp2 > 47 && mlp==1
-    setRespWidth(mlp2,mlp) = NaN;
-else
 
 ylim([0, max(firingRateBin)*1.2])
 xlim([1 2])
@@ -267,6 +280,8 @@ respWidth = (x_values_real(1) - x_values_real(end)) / 1000.0 * 10.0; % /1000=msÅ
 
 setRespWidth(mlp2,mlp) = respWidth;
 
+catch
+    setRespWidth(mlp2,mlp) = NaN;
 end
 
 

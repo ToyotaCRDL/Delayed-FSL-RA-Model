@@ -2,8 +2,20 @@
 This repository contains:
 
 - Finite Element (FE) simulations using Abaqus
-- Neural response simulations using a Leaky Integrate-and-Fire (LIF) model implemented in MATLAB
+- Neural response simulations using a Leaky Integrate-and-Fire (LIF) model implemented in MATLAB and Python
 - Processed results used to generate the figures in the manuscript
+
+
+### Versions
+- Tag `v1.0`: code and results of the original submission.
+- Branch `main`: revised version. Changes from v1.0:
+  1. SED threshold: the afferent current is I = β + K<sub>d</sub>|dU/dt| when |dU/dt| > θ and 0 otherwise, with θ = 0.13 J m<sup>-3</sup> ms<sup>-1</sup> for all stimuli. In v1.0 the threshold was applied to the SED increment per time step (1.1 J m<sup>-3</sup>), which corresponded to 2.2 J m<sup>-3</sup> ms<sup>-1</sup> for the probe and 0.44 J m<sup>-3</sup> ms<sup>-1</sup> for scanning.
+  2. Time step: 0.0125 ms for all stimuli; the SED from the FE model (output every 2.5 ms) is spline-resampled in time. In v1.0 the time step was 0.5 ms for the probe and 2.5 ms for scanning.
+  3. Refractory period: fixed at 2.1 ms. In v1.0 it was optimised within 0–1 ms.
+  4. Optimisation: NSGA-II (pymoo) in Python instead of MATLAB's gamultiobj, with the same objectives, bounds, population (150) and number of generations (100). All 150 non-dominated sets of the final population are used (v1.0: 53 sets).
+  5. All RA results in `LIF_model/*/result1/` and `result2/` were replaced. The control analysis (Sections 5.5 and 5.6) uses parameter set #87 (v1.0: #13). The SA1 results are unchanged.
+
+  The results of the revised version were computed with the Python implementation (`python/`, see `python/README.md`). The MATLAB scripts in `LIF_model/` were updated to the same settings; `LIF_model/check_with_python.m` compares them with the Python results.
 
 
 ## 2. Folder Structure
@@ -16,11 +28,14 @@ Project_Root/
 │  ├── stimulus3_dot_texture/
 │  └── stimulus4_single_dot/
 │
-└── LIF_model/
-    ├── stimulus1_probe/
-    ├── stimulus2_braille/
-    ├── stimulus3_dot_texture/
-    └── stimulus4_single_dot/
+├── LIF_model/
+│  ├── stimulus1_probe/
+│  ├── stimulus2_braille/
+│  ├── stimulus3_dot_texture/
+│  └── stimulus4_single_dot/
+│
+└── python/
+    └── results/
 ```
 
 
@@ -35,21 +50,25 @@ MATLAB scripts (.m) implementing the neural response (LIF) model and correspondi
 stimulusXX_XX/
 Each folder corresponds to one simulation condition described in the manuscript.
 
+python/
+Python scripts (.py) implementing the same LIF model, the multi-objective optimisation and all analyses of the revised version. `python/results/` contains the parameter sets and per-set summaries (see `python/README.md`).
+
 
 ## 3. Software Requirements
 Finite Element Simulation
 Abaqus Version: Abaqus 2016 and Abaqus 2022
 
 Neural Simulation
+Python 3.14 with numpy, scipy, pandas, openpyxl and pymoo (versions in `python/requirements.txt`)
 MATLAB Version: R2024b
-Required toolboxes: Global Optimization Toolbox
+Required toolboxes: Global Optimization Toolbox (optimisation), Signal Processing Toolbox (Sections 5.5 and 5.6)
 
 
 ## 4. Overall Workflow
 The simulation pipeline consists of the following steps:
 1. Run Abaqus FE simulation (.inp)
 2. Extract strain enelgy density data from FE output (extracted data: abaqusXX.rpt and fXX-X.xlsx, stored in LIF_model/stimulusXX_XX/fingerXX/)
-3. Run the MATLAB-based LIF simulation using the extracted FE data as input (.m)
+3. Run the LIF simulation using the extracted FE data as input: Python (`python/run_all.py` computes all results below; see `python/README.md`) or MATLAB (.m, Section 5)
 4. Neural response outputs
 
 
@@ -64,6 +83,7 @@ The simulation pipeline consists of the following steps:
 - Output (variables):<br>
 &nbsp;&nbsp;&nbsp;   `popSol`: Identified parameter sets (saved in param.mat)<br>
 &nbsp;&nbsp;&nbsp;   `popCost`:  Pareto-optimal solutions. Exported as probe_pareto_sol.csv (stored in result1/). Used to generate Fig. 2 in the manuscript.
+- In the revised version, the 150 parameter sets in param.mat (and `python/results/unitA/params.csv`) were obtained with `python/optimize.py` (NSGA-II). `multiObj_Pareto.m` optimises the same objectives with gamultiobj, which gives a different front.
 
 2\. Probe stimulation
 - Navigate to:<br>
@@ -119,7 +139,7 @@ The simulation pipeline consists of the following steps:
 - Run:<br>
 &nbsp;&nbsp;&nbsp;   `mainDotTexRA.m` (for RA responses)
 - Output (variables):<br>
-&nbsp;&nbsp;&nbsp;   `allSpikeTime`: Calculated spike timing. Exported as dot_texture_sep_param_13_ds_XX-XX_delay_XX.csv (stored in result1/). Used to generate Supplementary Fig. S7.<br>
+&nbsp;&nbsp;&nbsp;   `allSpikeTime`: Calculated spike timing. Exported as dot_texture_sep_param_87_ds_XX-XX_delay_XX.csv (stored in result1/). Used to generate Supplementary Fig. S7.<br>
 &nbsp;&nbsp;&nbsp;   `setFiringRateRMSE`: Calculated RMSE for firing rate. Exported as dot_texture_firerate_rmse.csv (stored in result2/). Used to generate Fig. 12(A).<br>
 &nbsp;&nbsp;&nbsp;   `setTempoVariRMSE`: Calculated RMSE for temporal variation. Exported as dot_texture_tempvar_rmse.csv (stored in result2/). Used to generate Fig. 12(A).
 
@@ -131,7 +151,7 @@ The simulation pipeline consists of the following steps:
 - Run:<br>
 &nbsp;&nbsp;&nbsp;   `mainSingleDotRA.m` (for RA responses)
 - Output (variables):<br>
-&nbsp;&nbsp;&nbsp;   `allSpikeTime`: Calculated spike timing. Exported as single_dot_sep_param_13_dw_XX-XX.csv (stored in result1/). Used to generate Supplementary Fig. S8.<br>
+&nbsp;&nbsp;&nbsp;   `allSpikeTime`: Calculated spike timing. Exported as single_dot_sep_param_87_dw_XX-XX_delay_XX.csv (stored in result1/). Used to generate Supplementary Fig. S8.<br>
 &nbsp;&nbsp;&nbsp;   `setRespWidth`: Calculated response width. Exported as single_dot_respwidth.csv (stored in result2/). The response widths in XX_respwidth2.csv represent the differences between the simulation results and the experimental data. Used to generate Fig. 12(B).
 
 

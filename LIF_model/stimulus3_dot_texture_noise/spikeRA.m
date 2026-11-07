@@ -27,8 +27,8 @@ function [firing_rate,t_spike,p_spike,spike_marker,time,v,time2,cur2,data_SED2] 
         end
     end
 
-    cur = cur + 2.5e-6*randn(size(cur));
-    % cur = cur + 5.0e-6*randn(size(cur));
+    cur = cur + 2.5e-6*sqrt(2.5/data_main(2,3))*randn(size(cur)); % revised: SD per 2.5 ms step scaled to dt
+    % cur = cur + 5.0e-6*sqrt(2.5/data_main(2,3))*randn(size(cur));
     
     spike_time_last = -ref;
     tn = 0.0;
