@@ -1,0 +1,31 @@
+source,set,speed_mm_s,count_0_100_ms,window_rate_spikes_s,total_spikes
+experiment,,9.5,4,40.0,4
+experiment,,14.8,4,40.0,4
+experiment,,20.6,5,50.0,5
+experiment,,34.0,5,50.0,5
+experiment,,46.5,4,40.0,4
+experiment,,60.6,4,40.0,4
+stand-in for #1,1.0,9.5,5,50.0,5
+stand-in for #1,1.0,14.8,4,40.0,4
+stand-in for #1,1.0,20.6,3,30.0,3
+stand-in for #1,1.0,34.0,2,20.0,2
+stand-in for #1,1.0,46.5,2,20.0,2
+stand-in for #1,1.0,60.6,2,20.0,2
+stand-in for #13,87.0,9.5,6,60.0,6
+stand-in for #13,87.0,14.8,6,60.0,6
+stand-in for #13,87.0,20.6,5,50.0,5
+stand-in for #13,87.0,34.0,4,40.0,4
+stand-in for #13,87.0,46.5,4,40.0,4
+stand-in for #13,87.0,60.6,3,30.0,3
+stand-in for #20,92.0,9.5,5,50.0,5
+stand-in for #20,92.0,14.8,5,50.0,5
+stand-in for #20,92.0,20.6,5,50.0,5
+stand-in for #20,92.0,34.0,4,40.0,4
+stand-in for #20,92.0,46.5,4,40.0,4
+stand-in for #20,92.0,60.6,3,30.0,3
+stand-in for #53,118.0,9.5,3,30.0,3
+stand-in for #53,118.0,14.8,4,40.0,4
+stand-in for #53,118.0,20.6,4,40.0,4
+stand-in for #53,118.0,34.0,4,40.0,4
+stand-in for #53,118.0,46.5,4,40.0,4
+stand-in for #53,118.0,60.6,3,30.0,3

@@ -14,6 +14,11 @@ global M;M = 1.0; % number of merkels
 %**********************************************
 
 
+%*** revised version: the same threshold and time step for every stimulus
+theta = 0.13;   % SED-rate threshold [J m^-3 ms^-1] (current only when |dU/dt| > theta)
+dt    = 0.0125; % time step [ms] (v1.0: 0.5 ms for the probe, 2.5 ms for scanning)
+% T_ref is fixed at 2.1 ms (column 3 of param.mat)
+
 load param.mat
 load expFireRate.mat
 load expTempVar.mat
@@ -29,7 +34,7 @@ global beta;beta  = param(mlp2,1);
 global lamda;lamda = param(mlp2,2);
 global v_thr;v_thr = param(mlp2,4);
 global ref;ref = param(mlp2,3);
-global u_thr;u_thr = 1.1;
+global u_thr; u_thr = theta * dt; % threshold on the SED increment per time step (v1.0: 1.1)
 
 figure(11); clf
 
@@ -38,7 +43,7 @@ for mlp = 1:6
 
 figure(1); clf
 
-clearvars -except R C tau M beta alpha lamda v_thr ref u_thr receptorName paramSet mlp mlp2 param ...
+clearvars -except R C tau M theta dt beta alpha lamda v_thr ref u_thr receptorName paramSet mlp mlp2 param ...
                   vec_allFiringRate_1D_SEP vec_allFiringRateHistogram vec_tempoVari vec_allFiringRateHistogramArray vec_tempoVariArray ...
                   expFireRate expTempVar dotSpace setFiringRateR2 setTempoVariR2 setFiringRateRMSE setTempoVariRMSE
 
@@ -114,11 +119,16 @@ end
 dataSED = dataSEDPost1;
 iniYcoordCenter = dataCoordResampY(:,1);
 
+%*** revised version: spline-resample the SED of the centre-line nodes (FE output every 2.5 ms) onto dt
+tFE = dataTime(:,1)*1000; % [ms]
+tq = linspace(tFE(1), tFE(end), round((tFE(end)-tFE(1))/dt) + 1)';
+dataSEDq = interp1(tFE, dataSED(:,1276:1327), tq, 'spline'); % nodes 1276-1327 (column ii-1275)
+
 clear dataMain
-dataMain(:,1) = dataSED(:,1);
-dataMain(:,2) = dataTime(:,1)*1000;
-dataMain(1:size(dataSED,1),3) = (dataTime(2,1)-dataTime(1,1))*1000;
-dataMain(:,4) = dataTime(:,1);
+dataMain(:,1) = dataSEDq(:,1);
+dataMain(:,2) = tq;
+dataMain(1:size(dataSEDq,1),3) = dt;
+dataMain(:,4) = tq/1000;
 
 
 jj=1;
@@ -128,8 +138,8 @@ for ii=1276:1326+1
 
 disp(['  mlp2 = ',num2str(mlp2),',  mlp = ',num2str(mlp),'  calculate ',num2str(ii),'th node out of ',num2str(size(dataSED,2)),' nodes'])
               
-dataMain(:,1) = dataSED(:,ii);%***SED
-dataMain(:,4) = dataTime(:,ii);%***yposi or time
+dataMain(:,1) = dataSEDq(:,ii-1275);%***SED
+dataMain(:,4) = tq/1000;%***time [s]
 
 
 [firingRate,spikeTime,spikePosition,spikeMarker,time,membPotential,time2,cur2,dataSED2] = spikeRA(dataMain);
