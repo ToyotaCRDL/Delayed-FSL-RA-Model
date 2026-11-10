@@ -43,7 +43,7 @@ Run in this folder, in this order. Results are written to `results/<name>/` (`un
 | 3 | `probe_summary.py` | `probe_summary.csv`: FSL and firing rate at each speed, ΔFSL, RMS rate error | < 1 min |
 | 4 | `theta_basis.py` | `theta_basis.csv`: residual SED fluctuation after the probe indentation (basis of θ) and a check that no set fires during the hold | < 1 min |
 | 4b | `hold_spikes.py` | hold-phase spikes (more than 10 ms after the end of the 1 mm indentation): `hold_spikes.csv` for the 150 revised sets (θ = 0.13) and `results/v1.0_sets/hold_spikes_theta0.csv` for the 53 v1.0 sets without the threshold (θ = 0); needs the v1.0 checkout | < 1 min |
-| 5 | `dt_series.py` | `dt_series/`: probe responses of the 150 sets at time steps from 0.5 to 0.0015625 ms | |
+| 5 | `dt_series.py` | `dt_series/`: probe responses of the 150 sets at time steps from 0.5 to 0.0125 ms | |
 | 6 | `response_analyses.py` | `thinning/`: spike-count-matched random thinning; `spike_counts/`: spike counts in 0–100 ms; `speed_contribution/`: per-speed errors and objective shares | |
 | 7 | `evaluate_front.py` | `front_summary.csv`: per-set metrics with the numbers of responding afferents | |
 | 8 | `optimize.py --relative --out unitA_relative_weights`, `evaluate_front.py unitA_relative_weights`, `relative_weights.py` | `results/unitA_relative_weights/`: front optimised with relative-error weights across speeds, and `comparison.csv` | |

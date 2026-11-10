@@ -1,8 +1,8 @@
 """Time-step sensitivity of the probe responses of the 53 parameter sets of the original submission (v1.0).
 
 The v1.0 front was optimised with the probe at dt = 0.5 ms and an SED-increment threshold of 1.1 J m^-3 per step
-(rate threshold theta = 2.2 J m^-3 ms^-1). The 53 sets (param.mat of tag v1.0) are recomputed at dt = 0.5, 0.1,
-0.0125 and 0.00625 ms with the rate threshold fixed (u_thr = theta * dt), for theta = 2.2 (probe setting of v1.0)
+(rate threshold theta = 2.2 J m^-3 ms^-1). The 53 sets (param.mat of tag v1.0) are recomputed at dt = 0.5, 0.1
+and 0.0125 ms with the rate threshold fixed (u_thr = theta * dt), for theta = 2.2 (probe setting of v1.0)
 and 0.44 (rate threshold of the v1.0 scanning simulations, 1.1 J m^-3 per 2.5 ms step); T_ref as in v1.0.
 For each set: FSL, 1/mean ISI and spike count per speed, J_FSL and J_Rate (as in plt_main_FST2.m /
 plt_main_ISI2.m) and dFSL at 9.5 mm/s.
@@ -21,7 +21,7 @@ import pandas as pd
 import lif
 
 OUT = lif.RESULTS / "v1.0_sets"
-DTS = (0.5, 0.1, 0.0125, 0.00625)
+DTS = (0.5, 0.1, 0.0125)
 THETAS = (2.2, 0.44)
 
 
