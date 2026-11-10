@@ -14,6 +14,7 @@ Settings of the revised version (`lif.py`), the same for every stimulus:
 | refractory period | fixed at 2.1 ms | optimised (0–1 ms) |
 | optimisation | NSGA-II (pymoo), population 150, 100 generations, seed 1; β, K_d, V_thr | gamultiobj, population 150, 100 generations; β, K_d, T_ref, V_thr |
 | parameter sets | all 150 non-dominated sets of the final population | 53 sets returned by gamultiobj |
+| FR and TV (dot pattern) | fractional-interval binning in 10-ms windows (Connor et al., 1990) | the same, but windows lying inside an interspike interval set to 0 |
 
 The SA1 model (Stimulus 2–4, comparison with RA) is unchanged.
 

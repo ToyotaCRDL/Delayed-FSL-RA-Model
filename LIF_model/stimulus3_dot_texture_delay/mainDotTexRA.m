@@ -226,23 +226,18 @@ if strcmp(modelNum,'58-27')
 else
     dataTime2=[1.2:0.01:1.7]'; %**********
 end
+% Rate in each 10-ms window by fractional-interval binning (Connor et al., 1990): each interspike interval adds
+% the fraction of it that lies in the window, and the sum is divided by the window width. A window inside an
+% interval therefore gets 1/ISI; windows before the first or after the last spike get 0.
+% (allSpikeTime{ii,1}(1) is the leading 0 of spike.m and is not a spike.)
+allFiringRateHistogram = zeros(size(dataTime2,1)-1, 51);
 for ii=1276:1326
-    for i=1:size(dataTime2,1)-1
-        numSpikesRA=0;
-        counts=0; index=0;
-        for j=1:size(allSpikeTime{ii,1},1)
-            if dataTime2(i,1)<=allSpikeTime{ii,1}(j,1)/1000 && allSpikeTime{ii,1}(j,1)/1000<=dataTime2(i+1,1) && index==0
-                counts = (allSpikeTime{ii,1}(j,1)/1000-dataTime2(i,1)) / (allSpikeTime{ii,1}(j,1)/1000-allSpikeTime{ii,1}(j-1,1)/1000);
-                index=1;
-            elseif dataTime2(i,1)<=allSpikeTime{ii,1}(j,1)/1000 && allSpikeTime{ii,1}(j,1)/1000<=dataTime2(i+1,1) && index==1
-                counts = counts + 1;
-            elseif dataTime2(i+1,1)<=allSpikeTime{ii,1}(j,1)/1000 && index==1
-                counts = counts + (dataTime2(i+1,1)-allSpikeTime{ii,1}(j-1,1)/1000) / (allSpikeTime{ii,1}(j,1)/1000-allSpikeTime{ii,1}(j-1,1)/1000);
-                index=0;
-            end
-        end
-        allFiringRateHistogram(i,ii-1275) = counts/0.01;
-    end    
+    s = allSpikeTime{ii,1}(2:end,1)/1000;
+    for k=1:numel(s)-1
+        overlap = min(dataTime2(2:end), s(k+1)) - max(dataTime2(1:end-1), s(k));
+        allFiringRateHistogram(:,ii-1275) = allFiringRateHistogram(:,ii-1275) + max(overlap,0)/(s(k+1)-s(k));
+    end
+    allFiringRateHistogram(:,ii-1275) = allFiringRateHistogram(:,ii-1275)/0.01;
 end
 tempoVari=0;
 for i=1:size(allFiringRateHistogram,2)

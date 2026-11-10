@@ -48,7 +48,7 @@ def main():
             else:
                 sep_bad += 1
                 print(f"SEP mismatch: #{n} dot spacing {ds}")
-            fr[5 - mlp], tv[5 - mlp] = scan.dot_texture_metrics(trains, finger)
+            fr[5 - mlp], tv[5 - mlp] = scan.dot_texture_metrics(trains, finger, histogram=scan.firing_rate_histogram_v1)
         fr_err.append(scan.rmse(exp_fr, fr) - rel_fr[n - 1])
         tv_err.append(scan.rmse(exp_tv, tv) - rel_tv[n - 1])
 

@@ -46,7 +46,7 @@ def check_delay(params):
             trains = scan.run(scan.DOT_TEXTURE_DIR, finger, row, delay=d)
             ref = load_released_sep(DOT_DELAY_DIR / "result1" / f"dot_texture_sep_param_13_ds_{ds}_delay_{d}.csv", True)
             ok, bad = (ok + 1, bad) if same_trains(trains, ref) else (ok, bad + 1)
-            fr[5 - mlp], tv[5 - mlp] = scan.dot_texture_metrics(trains, finger)
+            fr[5 - mlp], tv[5 - mlp] = scan.dot_texture_metrics(trains, finger, histogram=scan.firing_rate_histogram_v1)
         rw = []
         for mlp, (dw, finger) in enumerate(scan.DOT_WIDTHS):
             trains = scan.run(scan.SINGLE_DOT_DIR, finger, row, delay=d)
@@ -71,7 +71,7 @@ def check_noise(params, gamma=2.5e-6, sets=(1, 13, 30, 53)):
             tv = np.zeros(6)
             for mlp, (ds, finger) in enumerate(scan.DOT_SPACINGS):
                 trains = scan.run(scan.DOT_TEXTURE_DIR, finger, params[n - 1], noise=gamma, rng=rng)
-                fr[5 - mlp], tv[5 - mlp] = scan.dot_texture_metrics(trains, finger)
+                fr[5 - mlp], tv[5 - mlp] = scan.dot_texture_metrics(trains, finger, histogram=scan.firing_rate_histogram_v1)
             vals.append((scan.rmse(exp_fr, fr), scan.rmse(exp_tv, tv)))
         v = np.array(vals)
         print(f"  noise #{n}: FR RMSE {v[:, 0].mean():.2f}±{v[:, 0].std():.2f} (released {rel_fr[n - 1]:.2f}), "

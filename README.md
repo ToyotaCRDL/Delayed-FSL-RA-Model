@@ -13,7 +13,8 @@ This repository contains:
   2. Time step: 0.0125 ms for all stimuli; the SED from the FE model (output every 2.5 ms) is spline-resampled in time. In v1.0 the time step was 0.5 ms for the probe and 2.5 ms for scanning.
   3. Refractory period: fixed at 2.1 ms. In v1.0 it was optimised within 0–1 ms.
   4. Optimisation: NSGA-II (pymoo) in Python instead of MATLAB's gamultiobj, with the same objectives, bounds, population (150) and number of generations (100). All 150 non-dominated sets of the final population are used (v1.0: 53 sets).
-  5. All RA results in `LIF_model/*/result1/` and `result2/` were replaced. The control analysis (Sections 5.5 and 5.6) uses parameter set #87 (v1.0: #13). The SA1 results are unchanged.
+  5. FR and TV (dot pattern): the rate in each 10-ms window is computed by fractional-interval binning as in Connor et al. (1990), i.e. windows lying inside an interspike interval receive the fraction of that interval. In v1.0 these windows were assigned 0.
+  6. All RA results in `LIF_model/*/result1/` and `result2/` were replaced. The control analysis (Sections 5.5 and 5.6) uses parameter set #87 (v1.0: #13). The SA1 results are unchanged.
 
   The results of the revised version were computed with the Python implementation (`python/`, see `python/README.md`). The MATLAB scripts in `LIF_model/` were updated to the same settings; `LIF_model/check_with_python.m` compares them with the Python results.
 

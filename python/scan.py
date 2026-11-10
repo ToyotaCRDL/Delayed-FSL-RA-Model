@@ -4,7 +4,8 @@ _delay, _noise and _modi_RW variants).
 The SED on the FE surface grid is linearly interpolated (griddata) onto the 51 receptors on the finger centre line
 and fed to the LIF model of lif.py (spikeRA.m is identical to spike.m). In the revised version (dt given) the
 centre-line SED, output by the FE model every 2.5 ms, is spline-resampled in time onto the common time step; with
-dt=None the FE step is used as in v1.0. Metric code (FR, TV, RW) follows the MATLAB loops line by line, because
+dt=None the FE step is used as in v1.0. FR and TV use fractional-interval binning in 10-ms windows (Connor et
+al., 1990; the v1.0 histogram is kept as firing_rate_histogram_v1). RW code follows the MATLAB loops line by line, because
 bin-edge comparisons and the ill-conditioned 8th-degree polyfit are sensitive to the exact arithmetic.
 """
 
@@ -147,7 +148,24 @@ def suppress_onsets(t, cur, delay):
 # ---------------------------------------------------------------- Stimulus 3: FR and TV (mainDotTexRA.m)
 
 def firing_rate_histogram(spikes, edges):
-    """allFiringRateHistogram for one afferent; `spikes` [ms] without the 0 placeholder."""
+    """Rate in each 10-ms window for one afferent by fractional-interval binning (Connor et al., 1990).
+
+    Each interspike interval contributes the fraction of it that lies in the window; the sum is divided by the window
+    width (0.01 s). A window inside an interval therefore gets 1/ISI, and windows before the first or after the last
+    spike get 0. `spikes` [ms] without the 0 placeholder of spike.m, `edges` [s].
+    """
+    s = np.asarray(spikes, dtype=float) / 1000
+    hist = np.zeros(len(edges) - 1)
+    for a, b in zip(s[:-1], s[1:]):
+        hist += np.clip(np.minimum(edges[1:], b) - np.maximum(edges[:-1], a), 0.0, None) / (b - a)
+    return hist / 0.01
+
+
+def firing_rate_histogram_v1(spikes, edges):
+    """allFiringRateHistogram of v1.0 for one afferent; `spikes` [ms] without the 0 placeholder.
+
+    Kept only to reproduce the v1.0 results (verify_v1_*.py). It follows fractional-interval binning in windows that
+    contain a spike, but leaves windows lying inside an interspike interval at 0."""
     sp = np.concatenate([[0.0], spikes])  # allSpikeTime keeps spike.m's leading 0
     hist = np.zeros(len(edges) - 1)
     for i in range(len(edges) - 1):
@@ -167,10 +185,14 @@ def firing_rate_histogram(spikes, edges):
     return hist
 
 
-def dot_texture_metrics(spike_trains, finger):
-    """Mean firing rate (FR) and temporal variation (TV) over the 51 afferents for one dot spacing."""
+def dot_texture_metrics(spike_trains, finger, histogram=firing_rate_histogram):
+    """Mean firing rate (FR) and temporal variation (TV) over the 51 afferents for one dot spacing.
+
+    The analysis period is 1.2-1.7 s (1.15-1.65 s for finger 58-27), in 10-ms windows of fractional-interval rates.
+    FR is the mean over windows and afferents; TV is the mean absolute difference between windows 130 ms apart.
+    `histogram=firing_rate_histogram_v1` gives the v1.0 values."""
     edges = matlab_colon(1.15, 0.01, 1.65) if finger == "58-27" else matlab_colon(1.2, 0.01, 1.7)
-    hist = np.column_stack([firing_rate_histogram(s, edges) for s in spike_trains])
+    hist = np.column_stack([histogram(s, edges) for s in spike_trains])
     nb = hist.shape[0]
     tempo_vari = 0.0
     for i in range(hist.shape[1]):
